@@ -1,0 +1,12 @@
+title: 羅民勝文章
+description: 本網站內容，除個別註明者，全部為羅民勝本人論述著作。保留所有版權。轉載引用，請註明出處，包括作者及網站地址。
+theme: minima
+plugins:
+  - jekyll-feed
+
+# Optional metadata
+url: "https://lomansing.github.io"
+baseurl: ""
+
+# Build settings
+markdown: kramdown

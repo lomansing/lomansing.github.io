@@ -1,0 +1,69 @@
+---
+layout: default
+title: 羅民勝文章
+---
+
+<h1>{{ site.title }}</h1>
+<p class="site-description">{{ site.description }}</p>
+
+<input
+  id="post-search"
+  class="search-box"
+  type="search"
+  placeholder="搜尋文章標題..."
+  aria-label="搜尋文章標題"
+>
+
+{% assign sorted_categories = site.categories | sort %}
+{% for category in sorted_categories %}
+  {% assign category_name = category[0] %}
+  {% assign posts = category[1] | sort: "date" | reverse %}
+  <section class="category-group" data-category-group>
+    <h2>{{ category_name }}</h2>
+    <ul>
+      {% for post in posts %}
+        <li data-post-item data-title="{{ post.title | downcase | escape }}">
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endfor %}
+
+<p id="no-results" class="no-results" hidden>找不到符合的文章標題。</p>
+
+<script>
+  (function () {
+    var input = document.getElementById("post-search");
+    var postItems = Array.prototype.slice.call(
+      document.querySelectorAll("[data-post-item]")
+    );
+    var categoryGroups = Array.prototype.slice.call(
+      document.querySelectorAll("[data-category-group]")
+    );
+    var noResults = document.getElementById("no-results");
+
+    function applyFilter() {
+      var query = (input.value || "").trim().toLowerCase();
+      var visibleCount = 0;
+
+      postItems.forEach(function (item) {
+        var title = item.getAttribute("data-title") || "";
+        var visible = !query || title.indexOf(query) !== -1;
+        item.hidden = !visible;
+        if (visible) {
+          visibleCount += 1;
+        }
+      });
+
+      categoryGroups.forEach(function (group) {
+        var hasVisiblePost = group.querySelector("[data-post-item]:not([hidden])");
+        group.hidden = !hasVisiblePost;
+      });
+
+      noResults.hidden = visibleCount !== 0;
+    }
+
+    input.addEventListener("input", applyFilter);
+  })();
+</script>
